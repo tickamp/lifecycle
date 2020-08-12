@@ -15,17 +15,23 @@ type MyHTTPServer struct {
 }
 
 // NewHTTPServer creates a new HTTP server.
-func NewHTTPServer() *MyHTTPServer {
+func NewHTTPServer(addr string) *MyHTTPServer {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
 		rw.Write([]byte("Hello!"))
 	})
-	server := http.Server{Addr: ":8090", Handler: mux}
+	server := http.Server{Addr: addr, Handler: mux}
 	return &MyHTTPServer{
 		Worker: lifecycle.NewWorkerWithOptions(&lifecycle.Hooks{
 			Start:     lifecycle.DropContext(server.ListenAndServe),
 			Shutdown:  server.Shutdown,
 			Terminate: lifecycle.DropContext(server.Close),
+			Error: func(event lifecycle.Event) error {
+				if event.Error == http.ErrServerClosed {
+					return nil
+				}
+				return event.Error
+			},
 		}, &lifecycle.ServiceOptions{
 			Logger: simpleLogger{},
 		}),
@@ -34,7 +40,7 @@ func NewHTTPServer() *MyHTTPServer {
 }
 
 func main() {
-	NewHTTPServer().Start()
+	NewHTTPServer(":8080").Start()
 }
 
 type simpleLogger struct{}
