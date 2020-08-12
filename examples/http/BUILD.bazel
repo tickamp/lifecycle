@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["http.go"],
+    importpath = "go.tickamp.dev/lifecycle/examples/http",
+    visibility = ["//visibility:private"],
+    deps = ["//:go_default_library"],
+)
+
+go_binary(
+    name = "http",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)

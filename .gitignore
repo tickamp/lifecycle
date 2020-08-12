@@ -1,0 +1,6 @@
+bazel-*
+.vscode
+.idea
+*.tmp
+*.bak
+~*
