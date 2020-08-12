@@ -50,7 +50,7 @@ type Hooks struct {
 	// it is either terminated, or the Start hook returns.
 	Terminate ContextHook
 	// Error receives error events. The event struct contains the context
-	// passed to the hook from which it occured, as well as the error itself.
+	// passed to the hook from which it occurred, as well as the error itself.
 	// The error returned by this function will be passed to the caller. If nil
 	// is returned, the error is ignored. This can be useful to suppress errors,
 	// for example http.ErrServerClosed when the service wraps an HTTP server.
@@ -314,6 +314,9 @@ func (c *Worker) Terminate() error {
 	return c.TerminateCtx(context.Background())
 }
 
+// TerminateCtx forcefully terminates the service providing context. This
+// function returns a non-nil error if the Shutdown hook returns an error,
+// unless the error is ignored by the Error hook.
 func (c *Worker) TerminateCtx(ctx context.Context) error {
 	// Transition to stopping
 	if _, err := c.transition(ctx, Terminating,

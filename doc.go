@@ -64,30 +64,4 @@
 //
 // This package also provides a Host, which wraps multiple workers into a single
 // startable unit exposing the same API.
-//
-// The state machine provided by this package is the following:
-//
-//          +--------------+
-//          | Initial      |
-//          +-+------------+
-//            |
-//          +-v------------+
-//     +----+ Starting     +----+
-//     |    +-+------------+    |
-//     |      |                 |
-//     |    +-v------------+    |
-//     +----+ Started      +----+
-//     |    +-+------------+    |
-//     |      |                 |
-//     |    +-v------------+    |
-//     +----+ ShuttingDown +----+
-//     |    +-+------------+    |
-//     |      |                 |
-//     |    +-v------------+  +-v------------+
-//     +----+ Stopped      <--+ Terminating  |
-//     |    +--------------+  +-+------------+
-//     |                        |
-//     |    +--------------+    |
-//     +----> Error        <----+
-//          +--------------+
 package lifecycle

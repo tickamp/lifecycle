@@ -46,8 +46,8 @@ jobs:
         with:
           node-version: "12.x"
 
-      - name: Bazel
+      - name: Install Bazel
         run: yarn global add @bazel/bazelisk
 
-      - name: Push
+      - name: Test
         run: bazel test //...

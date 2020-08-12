@@ -2,8 +2,11 @@ package lifecycle
 
 import "fmt"
 
+// Logger is a simple logger interface accepting key-value pair parameters.
 type Logger interface {
+	// Logs an info message.
 	Info(msg string, keysAndValues ...interface{})
+	// Logs an error.
 	Error(err error, msg string, keysAndValues ...interface{})
 }
 

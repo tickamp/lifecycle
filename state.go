@@ -2,15 +2,48 @@ package lifecycle
 
 import "fmt"
 
+// State represents a state in the lifecycle state machine. The state machine
+// provided by this package is the following:
+//
+//          +--------------+
+//          | Initial      |
+//          +-+------------+
+//            |
+//          +-v------------+
+//     +----+ Starting     +----+
+//     |    +-+------------+    |
+//     |      |                 |
+//     |    +-v------------+    |
+//     +----+ Started      +----+
+//     |    +-+------------+    |
+//     |      |                 |
+//     |    +-v------------+    |
+//     +----+ ShuttingDown +----+
+//     |    +-+------------+    |
+//     |      |                 |
+//     |    +-v------------+  +-v------------+
+//     +----+ Stopped      <--+ Terminating  |
+//     |    +--------------+  +-+------------+
+//     |                        |
+//     |    +--------------+    |
+//     +----> Error        <----+
+//          +--------------+
 type State uint8
 
 const (
+	// Initial state of a service
 	Initial State = iota
+	// Starting represents a system that is in the process of starting.
 	Starting
+	// Started represents a running service.
 	Started
+	// ShuttingDown represents a process being shut down gracefully.
 	ShuttingDown
+	// Terminating represents a process being forcefully terminated.
 	Terminating
+	// Stopped represents a service shut down without errors.
 	Stopped
+	// Error represents a service having reached an error.
 	Error
 )
 
@@ -41,7 +74,7 @@ type Action uint8
 const (
 	// Undefined action.
 	Undefined Action = iota
-	// Do nothing.
+	// DoNothing instructs no action.
 	DoNothing
 	// Shutdown the service.
 	Shutdown
